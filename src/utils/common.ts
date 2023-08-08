@@ -322,6 +322,7 @@ export function toHexStringL(bytes) {
 
 export function getTokenFromChainID(tokenList,chainId) {
 
+  console.log("xxl getTokenFromChainID ",tokenList,chainId);  
 
   if(chainId == tokenList.uptickChainId){
     return tokenList.uptickToken

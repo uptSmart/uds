@@ -50,7 +50,7 @@ interface Bcfg {
             bscRPC:           config.str('bscRpc', ''),
             
             arbitrumToken:    config.str('arbitrumToken', ''),
-            arbitrumChainId:  config.str('arbitrumId', ''),
+            arbitrumChainId:  config.str('arbitrumChainId', ''),
             arbitrumRPC:        config.str('arbitrumRpc', ''),
             
             ethToken:         config.str('ethToken', ''),

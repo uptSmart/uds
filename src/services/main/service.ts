@@ -306,7 +306,7 @@ export class DataTransportService extends BaseService<DataTransportServiceOption
         
         }
 
-        //TODO 
+        
         if(list.length > 0){
           ret["tos"].push(getTokenFromChainID(this.options.chainToken,list[0]["toChainID"]));
         }
