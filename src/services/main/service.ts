@@ -287,7 +287,9 @@ export class DataTransportService extends BaseService<DataTransportServiceOption
           ids:[], uris:[],tos:[]
         }
 
-        console.log("xxl getDataByCrossID ",list,this.options.chainToken,);
+        console.log("xxl getDataByCrossID 0 ");
+        console.log("xxl getDataByCrossID 1 ",this.options.chainToken);
+        console.log("xxl getDataByCrossID 2 ",list);
         if(list == null){
           console.log("xxl not exist ");
           return okResphonse([]);
