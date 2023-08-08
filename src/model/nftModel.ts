@@ -486,7 +486,9 @@ export class NFTModel {
         try {
             console.log("###xxl 00 addDepositRecord start : ",despositParam);
             
-            if(this.isCrossIDExis("0x" + despositParam["crossID"])){
+            if(await this.isCrossIDExis("0x" + despositParam["crossID"])){
+
+                console.log("###xxl 00 addDepositRecord aleady exist ");
                 return false;
             }
             console.log("###xxl 00 addDepositRecord not exis : ",despositParam);
@@ -531,10 +533,13 @@ export class NFTModel {
 
         let querySQL = "select count(*) as cnt from cross_nft_txs where crossID = ? ;"
         let result = await this._db.query(querySQL,["0x" + crossID]);
-        console.log("xxl setStatus is ; ",result);   
-        if(result["cnt"] > 0){
+        // console.log("xxl setStatus is 00; ",result);  
+        // console.log("xxl setStatus is 01; ",parseInt(result[0]["cnt"], 10));   
+        if( parseInt(result[0]["cnt"], 10) > 0){
+            console.log("result is 000:",result[0]["cnt"]);
             return true;
         }else{
+            console.log("result is 001:",result[0]["cnt"]);
             return false;
         }
     }
