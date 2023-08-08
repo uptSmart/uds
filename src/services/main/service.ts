@@ -287,12 +287,13 @@ export class DataTransportService extends BaseService<DataTransportServiceOption
           ids:[], uris:[],tos:[]
         }
 
-        console.log("xxl getDataByCrossID ",list);
+        console.log("xxl getDataByCrossID ",list,this.options.chainToken,);
         if(list == null){
           console.log("xxl not exist ");
           return okResphonse([]);
         }
 
+        console.log("xxl getDataByCrossID 1");
         for(var i = 0 ;i < list.length ;i ++){
 
           var uri = list[i]["uri"] 
@@ -305,9 +306,10 @@ export class DataTransportService extends BaseService<DataTransportServiceOption
           ret["tos"].push(list[i]["toAddress"]);
         
         }
+        console.log("xxl getDataByCrossID 2");
 
-        
         if(list.length > 0){
+          console.log("xxl getDataByCrossID 3");
           ret["tos"].push(getTokenFromChainID(this.options.chainToken,list[0]["toChainID"]));
         }
 
