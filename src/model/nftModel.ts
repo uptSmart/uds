@@ -500,7 +500,7 @@ export class NFTModel {
                 //TDOD uri fromAddress,timespan call for the contract ...
                 let eachRow = [
                     "0x" + despositParam["crossID"],despositParam["nftID"][i],despositParam["uri"][i],
-                    "",despositParam["fromChainID"],despositParam["toAddress"][i],
+                    despositParam["fromAddress"],despositParam["fromChainID"],despositParam["toAddress"][i],
                     despositParam["toChainID"],"",
                     despositParam["depositTx"],"","",
                     despositParam["signature"],despositParam["fee"]
@@ -573,5 +573,137 @@ export class NFTModel {
             console.log(e);
             return false;
         }
+    }
+
+    public async getDataByCrossID(crossID:string){
+
+        try {
+         
+
+            let querySQL = "select * from cross_nft_txs \
+                            where crossID = ? order by id "
+
+            console.log(querySQL);
+                         
+            let dbRet = await this._db.query(querySQL,[crossID]);
+            console.log(dbRet);
+
+            //if DB not exit 
+            if(dbRet.length == 0){
+                return null;
+            }else{
+                return dbRet;
+            }
+
+        }catch (e) {
+            console.log(e);
+            return null;
+        }
+    }
+
+
+    public async getDataByFromAddress(fromAddress:string){
+
+        try {
+         
+
+            let querySQL = "select * from cross_nft_txs \
+                            where fromAddress = ? order by id "
+
+            console.log(querySQL);
+                         
+            let dbRet = await this._db.query(querySQL,[fromAddress]);
+            console.log(dbRet);
+
+            //if DB not exit 
+            if(dbRet.length == 0){
+                return null;
+            }else{
+                return dbRet;
+            }
+
+        }catch (e) {
+            console.log(e);
+            return null;
+        }
+    }
+
+
+    public async getDataByToAddress(toAddress:string){
+
+        try {
+         
+
+            let querySQL = "select * from cross_nft_txs \
+                            where toAddress = ? order by id "
+
+            console.log(querySQL);
+                         
+            let dbRet = await this._db.query(querySQL,[toAddress]);
+            console.log(dbRet);
+
+            //if DB not exit 
+            if(dbRet.length == 0){
+                return null;
+            }else{
+                return dbRet;
+            }
+
+        }catch (e) {
+            console.log(e);
+            return null;
+        }
+    }
+
+    public async getDataByAddress(address:String){
+
+        try {
+         
+
+            let querySQL = "select * from cross_nft_txs \
+                            where toAddress = ? or fromAddress = ? order by id "
+
+            console.log(querySQL);
+                         
+            let dbRet = await this._db.query(querySQL,[address,address]);
+            console.log(dbRet);
+
+            //if DB not exit 
+            if(dbRet.length == 0){
+                return null;
+            }else{
+                return dbRet;
+            }
+
+        }catch (e) {
+            console.log(e);
+            return null;
+        }
+
+    }
+
+
+    public async getDataByNftID(nftID:String){
+
+        try {
+         
+            let querySQL = "select * from cross_nft_txs where nftID = ? order by id "
+            console.log(querySQL);
+                         
+            let dbRet = await this._db.query(querySQL,[nftID]);
+            console.log("result data" ,dbRet);
+
+            //if DB not exit 
+            if(dbRet.length == 0){
+                return null;
+            }else{
+                return dbRet;
+            }
+
+        }catch (e) {
+            console.log(e);
+            return null;
+        }
+
     }
 }

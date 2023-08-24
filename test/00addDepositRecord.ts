@@ -31,7 +31,7 @@ describe('get cross fee', function() {
         toChainID:"421613",
         timespan:Date.now(),
         status:0,
-        depositTx:"0x00000000000000000000000000000000002",
+        depositTx:"0x7aa578244abe9f020db666c266241312bc986188fde5569992a1ded79db6310d",
         signature:"",
         fee:"123456"
       }

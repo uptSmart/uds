@@ -98,6 +98,7 @@ export class DataTransportService extends BaseService<DataTransportServiceOption
         server: any,
 
         web3:any,
+        web3Uptick:any,
 
         dbConf:DBConf,
         client:any,
@@ -125,7 +126,7 @@ export class DataTransportService extends BaseService<DataTransportServiceOption
       this.state.db = MySQL;
 
       this.state.web3 = new Web3();
-
+      this.state.web3Uptick = new Web3(this.options.chainToken.uptickRPC);
 
       //2.add wallet
       this.state.uptickWallet = setWallet(this.options.chainToken.uptickRPC,this.options.adminPriv);
@@ -355,7 +356,7 @@ export class DataTransportService extends BaseService<DataTransportServiceOption
         }catch(e){
           return errResphonse(ERR_MSG.UNKOWN_ERROR.NO,ERR_MSG.UNKOWN_ERROR.MSG);
         }
-    })
+    }),
 
     //call from chainbridge
     this._registerRoute(
@@ -370,8 +371,14 @@ export class DataTransportService extends BaseService<DataTransportServiceOption
         try{
           let nftModel = new NFTModel(this.state.db);
 
+          let txObj = await this.state.web3Uptick.eth.getTransaction(params["depositTx"]);
+          console.log("xxl txObj ",txObj);
+          params["fromAddress"] = txObj["from"]
+          
+          console.log("###setDepositRecord 1 ",params);
+
           // let tokenAddress = getTokenFromChainID(this.options.chainToken,params["fromChainID"]);
-          // let tokenWallet = getWalletFromChainID(this.state,this.options.chainToken,params["fromChainID"]);
+          //let tokenWallet = getWalletFromChainID(this.state,this.options.chainToken,params["fromChainID"]);
 
           // console.log("###setDepositRecord 1 aaa",tokenAddress,tokenWallet.address);
           
@@ -393,7 +400,7 @@ export class DataTransportService extends BaseService<DataTransportServiceOption
         }catch(e){
           return errResphonse(ERR_MSG.UNKOWN_ERROR.NO,ERR_MSG.UNKOWN_ERROR.MSG);
         }
-    })
+    }),
 
 
     //call from chainbridge
@@ -419,7 +426,107 @@ export class DataTransportService extends BaseService<DataTransportServiceOption
         }catch(e){
           return errResphonse(ERR_MSG.UNKOWN_ERROR.NO,ERR_MSG.UNKOWN_ERROR.MSG);
         }
-    })  
+    }),
+    
+    //call from chainbridge
+    this._registerRoute(
+      'post',
+      '/cross/getDataByCrossID',
+      async (req): Promise<APIData> => {
+
+        const params = req.body
+
+        console.log("###xxl 001 getDataByCrossID params : ",params);
+
+        let nftModel = new NFTModel(this.state.db);
+        let list = await nftModel.getDataByCrossID(
+            params.crossID,
+        );
+
+        return okResphonse(list);
+        // return okResphonse("OK");
+
+    }),
+
+    //call from chainbridge
+    this._registerRoute(
+      'post',
+      '/cross/getDataByFromAddress',
+      async (req): Promise<APIData> => {
+
+        const params = req.body
+
+        console.log("###xxl getDataByFromAddress params : ",params);
+
+        let nftModel = new NFTModel(this.state.db);
+        let list = await nftModel.getDataByFromAddress(
+            params.fromAddress,
+        );
+
+        return okResphonse(list);
+        // return okResphonse("OK");
+
+    }),
+    
+    //call from chainbridge
+    this._registerRoute(
+      'post',
+      '/cross/getDataByToAddress',
+      async (req): Promise<APIData> => {
+
+        const params = req.body
+
+        console.log("###xxl getDataByToAddress params : ",params);
+
+        let nftModel = new NFTModel(this.state.db);
+        let list = await nftModel.getDataByToAddress(
+            params.toAddress,
+        );
+
+        return okResphonse(list);
+        // return okResphonse("OK");
+
+    }),
+
+    //call from chainbridge
+    this._registerRoute(
+      'post',
+      '/cross/getDataByAddress',
+      async (req): Promise<APIData> => {
+
+        const params = req.body
+
+        console.log("###xxl getDataByAddress params : ",params);
+
+        let nftModel = new NFTModel(this.state.db);
+        let list = await nftModel.getDataByAddress(
+            params.address,
+        );
+
+        return okResphonse(list);
+        // return okResphonse("OK");
+
+    }),
+
+    //call from chainbridge
+    this._registerRoute(
+      'post',
+      '/cross/getDataByNftID',
+      async (req): Promise<APIData> => {
+
+        const params = req.body
+
+        console.log("###xxl getDataByNftID params : ",params);
+
+        let nftModel = new NFTModel(this.state.db);
+        let list = await nftModel.getDataByNftID(
+            params.nftID,
+        );
+
+        return okResphonse(list);
+        // return okResphonse("OK");
+
+    })
 
   
   }

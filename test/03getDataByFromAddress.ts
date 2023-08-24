@@ -12,16 +12,16 @@ describe('get cross fee', function() {
     let fullURL = '';
 
 
-    it('cross/getParamsByCrossID', function() {
+    it('cross/getDataByFromAddress', function() {
     
     
-      fullURL = baseURL + "cross/getParamsByCrossID"
-      let crossIDParam = {
-        crossID : "00000000000000000000000000000000001"
+      fullURL = baseURL + "cross/getDataByFromAddress"
+      let fromAddressParam = {
+        fromAddress : "0x676A37eC9DC13f95133Fa86dBC053370a9417d8B"
       }
 
       axios
-      .post(fullURL,crossIDParam)
+      .post(fullURL,fromAddressParam)
       .then( async res => {
         console.log(res.data);
 
