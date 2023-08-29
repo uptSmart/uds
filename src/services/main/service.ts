@@ -99,6 +99,10 @@ export class DataTransportService extends BaseService<DataTransportServiceOption
 
         web3:any,
         web3Uptick:any,
+        web3Polygon:any,
+        web3Bsc:any,
+        web3Eth:any,
+        web3Arbitrum:any,
 
         dbConf:DBConf,
         client:any,
@@ -110,6 +114,8 @@ export class DataTransportService extends BaseService<DataTransportServiceOption
         ethWallet:Wallet,
       
     } = {} as any
+
+    
   
     protected async _init(): Promise<void> {
 
@@ -127,17 +133,47 @@ export class DataTransportService extends BaseService<DataTransportServiceOption
 
       this.state.web3 = new Web3();
       this.state.web3Uptick = new Web3(this.options.chainToken.uptickRPC);
+      this.state.web3Polygon = new Web3(this.options.chainToken.polygonRPC);
+      this.state.web3Bsc = new Web3(this.options.chainToken.bscRPC);
+      this.state.web3Eth = new Web3(this.options.chainToken.ethRPC);
+      this.state.web3Arbitrum = new Web3(this.options.chainToken.arbitrumRPC);
 
       //2.add wallet
       this.state.uptickWallet = setWallet(this.options.chainToken.uptickRPC,this.options.adminPriv);
       this.state.polygonWallet = setWallet(this.options.chainToken.polygonRPC,this.options.adminPriv);
       this.state.bscWallet = setWallet(this.options.chainToken.bscRPC,this.options.adminPriv);
-      this.state.arbitrumWallet = setWallet(this.options.chainToken.arbitrumRPC,this.options.adminPriv);
       this.state.ethWallet = setWallet(this.options.chainToken.ethRPC,this.options.adminPriv);
+      this.state.arbitrumWallet = setWallet(this.options.chainToken.arbitrumRPC,this.options.adminPriv);
+      
       
       //initialize App
       this._initializeApp()
       
+    }
+
+    protected async  getAddressFromChainId(chainID,tx){
+
+      let txObj = null;
+      if(chainID == 1170 || chainID == 117){
+
+        console.log("-------------------come to getAddressFromChainId uptick")
+        txObj = await this.state.web3Uptick.eth.getTransaction(tx);
+      }else if(chainID == 80001 || chainID == 137 ){
+
+        console.log("-------------------come to getAddressFromChainId polygon")
+        txObj = await this.state.web3Polygon.eth.getTransaction(tx);
+        
+      }else if(chainID == 97 || chainID == 56 ){
+        txObj = await this.state.web3Bsc.eth.getTransaction(tx);
+      }else if(chainID == 421613 || chainID == 42161  ){
+        txObj = await this.state.web3Arbitrum.eth.getTransaction(tx);
+      }else if(chainID == 11155111 || chainID == 1 ){
+        txObj = await this.state.web3Eth.eth.getTransaction(tx);
+      }
+
+
+      return txObj["from"]
+  
     }
   
     protected async _start(): Promise<void> {
@@ -371,24 +407,10 @@ export class DataTransportService extends BaseService<DataTransportServiceOption
         try{
           let nftModel = new NFTModel(this.state.db);
 
-          let txObj = await this.state.web3Uptick.eth.getTransaction(params["depositTx"]);
-          console.log("xxl txObj ",txObj);
-          params["fromAddress"] = txObj["from"]
-          
+
+          params["fromAddress"] = await this.getAddressFromChainId(params['fromChainID'],params["depositTx"]);
           console.log("###setDepositRecord 1 ",params);
 
-          // let tokenAddress = getTokenFromChainID(this.options.chainToken,params["fromChainID"]);
-          //let tokenWallet = getWalletFromChainID(this.state,this.options.chainToken,params["fromChainID"]);
-
-          // console.log("###setDepositRecord 1 aaa",tokenAddress,tokenWallet.address);
-          
-          // let len = params["nftID"].length;
-          // for(var i = 0 ; i < len ;i ++){
-
-          //   let uri = await evmHandles.getEvmNFT(tokenAddress,tokenWallet,params["nftID"][i]);
-          //   params["uri"] = uri;
-          // }
-          
           // console.log("###setDepositRecord 2 ",params);
           let isSucess = await nftModel.addDepositRecord(params);
 
@@ -528,8 +550,12 @@ export class DataTransportService extends BaseService<DataTransportServiceOption
 
     })
 
-  
+
   }
+
+
+  
   
 }
+
 

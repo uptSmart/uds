@@ -19,7 +19,6 @@ describe('get cross fee', function() {
     
       fullURL = baseURL + "cross/addDepositRecord"
 
-      const hexCrossID = utils
       //TODO Sign
       let addDepositRecordParam = {
         crossID : "0x00000000000000000000000000000000001",
@@ -29,11 +28,11 @@ describe('get cross fee', function() {
         fromChainID:"1170",
         toAddress:["0x9D16512DD5b6C96E9E2196d30ff44F31Ca2d6077","0xfF7d59D9316EBA168837E3eF924BCDFd64b237D8"],
         toChainID:"421613",
-        timespan:Date.now(),
         status:0,
         depositTx:"0x7aa578244abe9f020db666c266241312bc986188fde5569992a1ded79db6310d",
         signature:"",
-        fee:"123456"
+        fee:"123456",
+        timespan: Date.now() + randomRangeNumber(100000,999999) + ""
       }
 
       axios
@@ -58,3 +57,9 @@ describe('get cross fee', function() {
 });
 
 
+var randomRangeNumber = function(minNumber, maxNumber) {
+  var range = maxNumber - minNumber;                      //取值范围的差
+  var random = Math.random();                             //小于1的随机数
+  return minNumber + Math.round(random * range);          //最小数与随机数和取值范围求和，返回想要的随机数字
+
+}

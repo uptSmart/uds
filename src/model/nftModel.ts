@@ -501,7 +501,7 @@ export class NFTModel {
                 let eachRow = [
                     "0x" + despositParam["crossID"],despositParam["nftID"][i],despositParam["uri"][i],
                     despositParam["fromAddress"],despositParam["fromChainID"],despositParam["toAddress"][i],
-                    despositParam["toChainID"],"",
+                    despositParam["toChainID"],despositParam["timespan"],
                     despositParam["depositTx"],"","",
                     despositParam["signature"],despositParam["fee"]
                 ]
