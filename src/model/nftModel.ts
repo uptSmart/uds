@@ -422,8 +422,7 @@ export class NFTModel {
 
         try {
          
-
-            let querySQL = "select uri,nftID,toAddress,toChainID from cross_nft_txs \
+            let querySQL = "select uri,nftID,toAddress,toChainID,resourceID from cross_nft_txs \
                             where crossID = ? order by id "
 
             console.log(querySQL);
@@ -503,7 +502,7 @@ export class NFTModel {
                     despositParam["fromAddress"],despositParam["fromChainID"],despositParam["toAddress"][i],
                     despositParam["toChainID"],despositParam["timespan"],
                     despositParam["depositTx"],"","",
-                    despositParam["signature"],despositParam["fee"]
+                    despositParam["signature"],despositParam["fee"],"0x" + despositParam["resourceID"]
                 ]
                 values.push(eachRow);
 
@@ -514,8 +513,8 @@ export class NFTModel {
             //if DB exis return db globleID
             let querySQL = "insert into cross_nft_txs \
                             (crossID,nftID,uri,fromAddress,fromChainID,toAddress,toChainID, \
-                            timespan,depositTx,voteTx,executeTx,signature,fee) \
-                            values ?;"            
+                            timespan,depositTx,voteTx,executeTx,signature,fee,resourceID) \
+                            values ?;"
             let rowNum = await this._db.query( querySQL,[values]);
             console.log("### rowNum ",rowNum);
             return true;   
@@ -575,13 +574,28 @@ export class NFTModel {
         }
     }
 
+    //xxl regster Cross NFT Txs
+    public async setStatusByCrossID(crossID,status){
+
+        try {
+            console.log("###xxl 00 statusParam : ",crossID);
+
+            let updateSQL = "update cross_nft_txs set status = ? where crossID = ? ;"
+            await this._db.query(updateSQL,[status,crossID]);
+
+        } catch (e) {
+            console.log(e);
+            return false;
+        }
+    }
+
     public async getDataByCrossID(crossID:string){
 
         try {
          
 
-            let querySQL = "select * from cross_nft_txs \
-                            where crossID = ? order by id "
+            let querySQL = "select a.*,b.* from cross_nft_txs a ,cross_nft_tokens b\
+                            where a.crossID = ? and a.resourceID = b.resourceID order by a.id desc "
 
             console.log(querySQL);
                          
@@ -608,7 +622,7 @@ export class NFTModel {
          
 
             let querySQL = "select * from cross_nft_txs \
-                            where fromAddress = ? order by id "
+                            where fromAddress = ? order by id desc "
 
             console.log(querySQL);
                          
@@ -635,7 +649,7 @@ export class NFTModel {
          
 
             let querySQL = "select * from cross_nft_txs \
-                            where toAddress = ? order by id "
+                            where toAddress = ? order by id desc"
 
             console.log(querySQL);
                          
@@ -660,8 +674,8 @@ export class NFTModel {
         try {
          
 
-            let querySQL = "select * from cross_nft_txs \
-                            where toAddress = ? or fromAddress = ? order by id "
+            let querySQL = "select a.*,b.* from cross_nft_txs a ,cross_nft_tokens b \
+                            where toAddress = ? or fromAddress = ? and a.resourceID = b.resourceID order by a.id desc"
 
             console.log(querySQL);
                          
@@ -687,7 +701,8 @@ export class NFTModel {
 
         try {
          
-            let querySQL = "select * from cross_nft_txs where nftID = ? order by id "
+            let querySQL = "select a.*,b.* from cross_nft_txs a ,cross_nft_tokens b \
+                            where nftID = ? and a.resourceID = b.resourceID order by a.id desc"
             console.log(querySQL);
                          
             let dbRet = await this._db.query(querySQL,[nftID]);
@@ -698,6 +713,54 @@ export class NFTModel {
                 return null;
             }else{
                 return dbRet;
+            }
+
+        }catch (e) {
+            console.log(e);
+            return null;
+        }
+
+    }
+
+    public async getBatchProcessTx(){
+
+        try {
+         
+            let querySQL = "select * from cross_nft_txs where status = 2"                      
+            let dbRet = await this._db.query(querySQL,[]);
+   
+            //if DB not exit 
+            if(dbRet.length == 0){
+                return null;
+            }else{
+                return dbRet;
+            }
+
+        }catch (e) {
+            console.log(e);
+            return null;
+        }
+
+    }
+
+    public async getTokenAddressFromResourceIDAndChainID(resourceID,chainID){
+
+        try {
+         
+            let querySQL = "select * from cross_nft_tokens where resourceID = ?"                      
+            let dbRet = await this._db.query(querySQL,[resourceID]);
+   
+            //if DB not exit 
+            if(dbRet.length == 0){
+                return null;
+            }else{
+                if(dbRet[0]["fromChainID"] == chainID){
+                    return dbRet[0]["fromTokenAddress"] 
+                }else if(dbRet[0]["toChainID"] == chainID){
+                    return dbRet[0]["toTokenAddress"] 
+                }else{
+                    return ""
+                }
             }
 
         }catch (e) {

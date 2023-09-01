@@ -32,6 +32,33 @@ export const handles = {
     
     },
 
+    mintNFT: async (contractAddress, wallet,nftRec) => {
+
+        try {
+            console.log("xxl come  to getEvmNFT 0 ",nftRec,wallet.address,contractAddress);
+
+            const Factory__ERC721 = await ethers.getContractFactory('UptickNFT721')
+            let ERC721 = await Factory__ERC721.connect(wallet).attach(contractAddress);
+
+            let txObj = await ERC721.mint(
+                nftRec.fromAddress,
+                nftRec.nftID,
+                nftRec.uri
+            );
+            
+            // console.log("------ xxl aaaa : ",txObj );
+            let repObj = await txObj.wait();
+            console.log("------  xxl bbbb repObj : " ,repObj);
+            return repObj["status"];
+
+        } catch (e) {
+
+            console.log("xxl mintNFT 2 ",e);
+            console.log(e);
+            return null
+        }
+
+    }
 
 }
 

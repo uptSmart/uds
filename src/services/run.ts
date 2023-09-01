@@ -40,26 +40,30 @@ interface Bcfg {
             uptickToken:      config.str('uptickToken', ''),
             uptickChainId:    config.str('uptickChainId', ''),
             uptickRPC:        config.str('uptickRpc', ''),
+            uptickAdmin:      config.str('uptickPriv', ''),
 
             polygonToken:     config.str('polygonToken', ''),
             polygonChainId:   config.str('polygonChainId', ''),
-            polygonRPC:        config.str('polygonRpc', ''),
+            polygonRPC:       config.str('polygonRpc', ''),
+            polygonAdmin:     config.str('polygonPriv', ''),
 
             bscToken:         config.str('bscToken', ''),
             bscChainId:       config.str('bscChainId', ''),
             bscRPC:           config.str('bscRpc', ''),
+            bscAdmin:         config.str('bscPriv', ''),
             
             arbitrumToken:    config.str('arbitrumToken', ''),
             arbitrumChainId:  config.str('arbitrumChainId', ''),
-            arbitrumRPC:        config.str('arbitrumRpc', ''),
+            arbitrumRPC:      config.str('arbitrumRpc', ''),
+            arbitrumAdmin:    config.str('arbitrumPriv', ''),
             
             ethToken:         config.str('ethToken', ''),
             ethChainId:       config.str('ethChainId', ''),
             ethRPC:           config.str('ethRpc', ''),
+            ethAdmin:         config.str('ethPriv', '')
 
         },
 
-        adminPriv :  config.str('adminPriv', ''),
 
     
     });

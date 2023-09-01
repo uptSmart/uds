@@ -340,6 +340,7 @@ export function getTokenFromChainID(tokenList,chainId) {
   
  }
 
+ 
  export function getWalletFromChainID(state,tokenList,chainId) {
 
   if(chainId == tokenList.uptickChainId){

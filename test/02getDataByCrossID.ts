@@ -17,7 +17,7 @@ describe('get cross fee', function() {
     
       fullURL = baseURL + "cross/getDataByCrossID"
       let crossIDParam = {
-        crossID : "0x5f41a1ec8d2ce469cb633983617af758cb8f9d25e2de3a007480ab5d2d48f3f8"
+        crossID : "0x555837de9e87641dbcc5774ee6b7783bc95f6a5e5b9c12ac39d1ea77300d254d"
       }
 
       axios

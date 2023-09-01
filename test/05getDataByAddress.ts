@@ -17,7 +17,7 @@ describe('get cross fee', function() {
     
       fullURL = baseURL + "cross/getDataByAddress"
       let addressParam = {
-        address : "0x676a37ec9dc13f95133fa86dbc053370a9417d8b"
+        address : "0x676A37eC9DC13f95133Fa86dBC053370a9417d8B"
       }
 
       axios
