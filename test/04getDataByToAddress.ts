@@ -8,7 +8,7 @@ var axios = require('axios')
 
 describe('get cross fee', function() {
 
-    let baseURL = "http://localhost:8789/";
+    let baseURL = "http://13.213.149.227:8789/";
     let fullURL = '';
 
 
@@ -17,7 +17,7 @@ describe('get cross fee', function() {
     
       fullURL = baseURL + "cross/getDataByToAddress"
       let toAddressParam = {
-        toAddress : "0x676A37eC9DC13f95133Fa86dBC053370a9417d8B"
+        toAddress : "0xE6391Ac3D333AeDbbd8B398E524509d705f3E23e"
       }
 
       axios

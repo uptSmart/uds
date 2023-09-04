@@ -603,7 +603,7 @@ export class DataTransportService extends BaseService<DataTransportServiceOption
     //call from chainbridge
     this._registerRoute(
       'post',
-      '/cross/getDataByNftID',
+      '/cross/getDataByNftIDAndTokenAddress',
       async (req): Promise<APIData> => {
 
         const params = req.body
@@ -611,8 +611,9 @@ export class DataTransportService extends BaseService<DataTransportServiceOption
         console.log("###xxl getDataByNftID params : ",params);
 
         let nftModel = new NFTModel(this.state.db);
-        let list = await nftModel.getDataByNftID(
+        let list = await nftModel.getDataByNftIDAndTokenAddress(
             params.nftID,
+            params.tokenAddress
         );
 
         return okResphonse(list);

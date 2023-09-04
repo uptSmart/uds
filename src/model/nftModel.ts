@@ -697,15 +697,16 @@ export class NFTModel {
     }
 
 
-    public async getDataByNftID(nftID:String){
+    public async getDataByNftIDAndTokenAddress(nftID:String,tokenAddress:string){
 
         try {
          
             let querySQL = "select a.*,b.* from cross_nft_txs a ,cross_nft_tokens b \
-                            where nftID = ? and a.resourceID = b.resourceID order by a.id desc"
+                            where nftID = ? and a.resourceID = b.resourceID and \
+                            ( LOWER(b.fromTokenAddress) = LOWER(?) or LOWER(b.toTokenAddress) = LOWER(?) ) order by a.id desc"
             console.log(querySQL);
                          
-            let dbRet = await this._db.query(querySQL,[nftID]);
+            let dbRet = await this._db.query(querySQL,[nftID,tokenAddress,tokenAddress]);
             console.log("result data" ,dbRet);
 
             //if DB not exit 

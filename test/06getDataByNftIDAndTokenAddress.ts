@@ -12,12 +12,13 @@ describe('get Data By NftID', function() {
     let fullURL = '';
 
 
-    it('cross/getDataByNftID', function() {
+    it('cross/getDataByNftIDAndTokenAddress', function() {
     
     
-      fullURL = baseURL + "cross/getDataByNftID"
+      fullURL = baseURL + "cross/getDataByNftIDAndTokenAddress"
       let nftIDParam = {
-        nftID : "1001"
+        nftID : "1693814390029475404",
+        tokenAddress:"0x0d31bCBd12D0806EC516a3b3AFDDadd8a7cC7D55"
       }
 
       axios
