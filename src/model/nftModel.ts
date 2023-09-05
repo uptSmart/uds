@@ -594,7 +594,7 @@ export class NFTModel {
         try {
          
 
-            let querySQL = "select a.*,b.* from cross_nft_txs a ,cross_nft_tokens b\
+            let querySQL = "select a.*,b.fromTokenAddress,b.toTokenAddress from cross_nft_txs a ,cross_nft_tokens b\
                             where a.crossID = ? and a.resourceID = b.resourceID order by a.id desc "
 
             console.log(querySQL);
@@ -701,7 +701,7 @@ export class NFTModel {
 
         try {
          
-            let querySQL = "select a.*,b.* from cross_nft_txs a ,cross_nft_tokens b \
+            let querySQL = "select a.*,b.fromTokenAddress,b.toTokenAddress from cross_nft_txs a ,cross_nft_tokens b \
                             where nftID = ? and a.resourceID = b.resourceID and \
                             ( LOWER(b.fromTokenAddress) = LOWER(?) or LOWER(b.toTokenAddress) = LOWER(?) ) order by a.id desc"
             console.log(querySQL);

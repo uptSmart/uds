@@ -8,7 +8,7 @@ var axios = require('axios')
 
 describe('get Data By NftID', function() {
 
-    let baseURL = "http://13.213.149.227:8789/";
+    let baseURL = "http://localhost:8789/";
     let fullURL = '';
 
 
@@ -17,8 +17,8 @@ describe('get Data By NftID', function() {
     
       fullURL = baseURL + "cross/getDataByNftIDAndTokenAddress"
       let nftIDParam = {
-        nftID : "1693814390029475404",
-        tokenAddress:"0x0d31bCBd12D0806EC516a3b3AFDDadd8a7cC7D55"
+        nftID : "1693911656197190541",
+        tokenAddress:"0x0d31bcbd12d0806ec516a3b3afddadd8a7cc7d55"
       }
 
       axios
