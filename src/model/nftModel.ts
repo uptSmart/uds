@@ -492,40 +492,66 @@ export class NFTModel {
             }
             console.log("###xxl 00 addDepositRecord not exis : ",despositParam);
 
-            let len = despositParam["nftID"].length;
-            let values = [];
-            for(let i = 0 ;i < len ;i ++){
+            let isDoubleInsert = true;
+            isDoubleInsert = await this.checkDoubleInsert(
+                "0x" + despositParam["crossID"],
+                despositParam["nftID"][0]
+            );
 
-                //TDOD uri fromAddress,timespan call for the contract ...
-                let eachRow = [
-                    "0x" + despositParam["crossID"],despositParam["nftID"][i],despositParam["uri"][i],
-                    despositParam["fromAddress"],despositParam["fromChainID"],despositParam["toAddress"][i],
-                    despositParam["toChainID"],despositParam["timespan"],
-                    despositParam["depositTx"],"","",
-                    despositParam["signature"],despositParam["fee"],"0x" + despositParam["resourceID"]
-                ]
-                values.push(eachRow);
-
+            if(!isDoubleInsert){
+                console.log("xxl isDoubleInsert is OK ");
+                let len = despositParam["nftID"].length;
+                let values = [];
+                for(let i = 0 ;i < len ;i ++){
+    
+                    //TDOD uri fromAddress,timespan call for the contract ...
+                    let eachRow = [
+                        "0x" + despositParam["crossID"],despositParam["nftID"][i],despositParam["uri"][i],
+                        despositParam["fromAddress"],despositParam["fromChainID"],despositParam["toAddress"][i],
+                        despositParam["toChainID"],despositParam["timespan"],
+                        despositParam["depositTx"],"","",
+                        despositParam["signature"],despositParam["fee"],"0x" + despositParam["resourceID"]
+                    ]
+                    values.push(eachRow);
+    
+                }
+    
+    
+                console.log("###xxl array : ",values);
+                //if DB exis return db globleID
+                let querySQL = "insert into cross_nft_txs \
+                                (crossID,nftID,uri,fromAddress,fromChainID,toAddress,toChainID, \
+                                timespan,depositTx,voteTx,executeTx,signature,fee,resourceID) \
+                                values ?;"
+                let rowNum = await this._db.query( querySQL,[values]);
+                console.log("### rowNum ",rowNum);
+                return true;   
+            }else{
+                console.log("xxl isDoubleInsert is NG ",despositParam);
             }
-
-
-            console.log("###xxl array : ",values);
-            //if DB exis return db globleID
-            let querySQL = "insert into cross_nft_txs \
-                            (crossID,nftID,uri,fromAddress,fromChainID,toAddress,toChainID, \
-                            timespan,depositTx,voteTx,executeTx,signature,fee,resourceID) \
-                            values ?;"
-            let rowNum = await this._db.query( querySQL,[values]);
-            console.log("### rowNum ",rowNum);
-            return true;   
-            
-            
 
 
         }catch (e) {
             console.log(e);
             return false;
         }
+    }
+
+    private async checkDoubleInsert(crossID :string,nftID:string) {
+
+        console.log("###xxl 0 checkDoubleInsert : ",crossID,nftID);
+        //A -> B number
+        let querySQL = "select count(*) as cNum from cross_nft_txs where crossID = ? and nftID = ?"
+        let cNumObj = await this._db.query( querySQL,[crossID,nftID]);
+
+        console.log("###xxl 1 checkDoubleInsert : ",cNumObj,cNumObj[0]["cNum"]);
+        if(cNumObj[0]["cNum"] > 0){
+            return true
+        }else{
+            return false
+        }
+
+        
     }
 
     private async isCrossIDExis(crossID){

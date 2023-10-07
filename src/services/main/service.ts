@@ -193,11 +193,7 @@ export class DataTransportService extends BaseService<DataTransportServiceOption
         //4.procee each rec
         await this._processEachRec(dbRet[i],nftModel)
       }
-  
-    
     }
-
-
 
     private async _processEachRec(eachRec:any,nftModel:any){
 
