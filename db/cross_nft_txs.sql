@@ -8,7 +8,9 @@ DROP TABLE IF EXISTS `cross_nft_txs`;
 CREATE TABLE `cross_nft_txs` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `crossID` varchar(128) DEFAULT NULL COMMENT 'cross ID',
+  `type` int(4) DEFAULT 0 COMMENT 'type',
   `nftID` varchar(256) DEFAULT NULL COMMENT 'NFT uri',
+  `amount` varchar(256) DEFAULT NULL COMMENT 'NFT uri',
   `uri` varchar(256) DEFAULT NULL COMMENT 'NFT uri',
   `fromAddress` varchar(64) DEFAULT NULL COMMENT 'from address',
   `fromChainID` varchar(64) DEFAULT NULL COMMENT 'from chain ID',

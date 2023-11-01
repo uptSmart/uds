@@ -410,13 +410,13 @@ export class DataTransportService extends BaseService<DataTransportServiceOption
         }
         console.log("xxl getDataByCrossID 2");
 
-        if(list.length > 0){
-          console.log("xxl getDataByCrossID 3");
+        // if(list.length > 0){
+        //   console.log("xxl getDataByCrossID 3");
 
-          //TODO
-          let tokenAddress = await nftModel.getTokenAddressFromResourceIDAndChainID(list[0]["resourceID"],list[0]["toChainID"])
-          ret["tos"].push(tokenAddress);
-        }
+        //   //TODO
+        //   let tokenAddress = await nftModel.getTokenAddressFromResourceIDAndChainID(list[0]["resourceID"],list[0]["toChainID"])
+        //   ret["tos"].push(tokenAddress);
+        // }
 
         return okResphonse(ret);
         // return okResphonse("OK");
@@ -613,6 +613,46 @@ export class DataTransportService extends BaseService<DataTransportServiceOption
         );
 
         return okResphonse(list);
+        // return okResphonse("OK");
+
+    }),
+
+    //call from chainbridge
+    this._registerRoute(
+      'post',
+      '/cross/registerToken',
+      async (req): Promise<APIData> => {
+
+        const params = req.body
+
+        console.log("###xxl cross/registerToken : ",params);
+
+        let nftModel = new NFTModel(this.state.db);
+        let result = await nftModel.regestToken(
+          params
+        );
+
+        return okResphonse(result);
+        // return okResphonse("OK");
+
+    }),
+
+    //call from chainbridge
+    this._registerRoute(
+      'post',
+      '/cross/getToken',
+      async (req): Promise<APIData> => {
+
+        const params = req.body
+
+        console.log("###xxl cross/getToken : ",params);
+
+        let nftModel = new NFTModel(this.state.db);
+        let result = await nftModel.getToken(
+          params
+        );
+
+        return okResphonse(result);
         // return okResphonse("OK");
 
     })
